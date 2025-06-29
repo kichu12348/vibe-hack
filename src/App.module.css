@@ -522,6 +522,12 @@ select.input {
   box-shadow: 0 0 15px rgba(37, 211, 102, 0.5);
 }
 
+.modalWhatsAppIcon{
+  color: white;
+  font-size: 1rem;
+  transition: transform 0.2s;
+}
+
 /* Custom Dropdown Styles */
 .dropdown {
   position: relative;
