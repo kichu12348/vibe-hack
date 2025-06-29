@@ -570,7 +570,7 @@ function App() {
                         </div>
                         <div className={styles.formGroup}>
                           <label className={styles.label}>
-                            <FaEnvelope /> Email
+                            <FaEnvelope /> Email*
                           </label>
                           <input
                             type="email"
@@ -585,7 +585,7 @@ function App() {
                         </div>
                         <div className={styles.formGroup}>
                           <label className={styles.label}>
-                            <FaPhone /> Phone Number
+                            <FaPhone /> Phone Number*
                           </label>
                           <input
                             type="tel"
@@ -600,7 +600,7 @@ function App() {
                         </div>
                         <div className={styles.formGroup}>
                           <label className={styles.label}>
-                            <FaUser /> Gender
+                            <FaUser /> Gender*
                           </label>
                           <Dropdown
                             value={user.gender}
