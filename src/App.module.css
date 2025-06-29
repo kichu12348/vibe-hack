@@ -1,0 +1,209 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.logoContainer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.logo {
+  height: 60px;
+  object-fit: contain;
+}
+
+.title {
+  font-size: 3rem;
+  color: var(--primary-color);
+  text-align: center;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  text-shadow: 3px 3px 0 var(--accent-color);
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  color: var(--text-color);
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.highlight {
+  color: var(--primary-color);
+}
+
+.gameScreen {
+  background-color: var(--accent-color);
+  border: 4px solid var(--primary-color);
+  border-radius: 10px;
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto 3rem;
+  position: relative;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.gameContent {
+  padding: 2rem;
+  background-color: #0f0f0f;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.hackathonInfo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.infoItem {
+  text-align: center;
+  background-color: #1a1a1a;
+  padding: 1rem;
+  border: 2px solid var(--primary-color);
+  border-radius: 5px;
+}
+
+.infoTitle {
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+}
+
+.infoValue {
+  font-size: 1.2rem;
+}
+
+.fee {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.2rem;
+}
+
+.playButton {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  font-size: 1.5rem;
+  padding: 0.5rem 3rem;
+  border: 3px solid var(--secondary-color);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 2rem;
+}
+
+.playButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px var(--primary-color);
+}
+
+.venue {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 1rem;
+}
+
+.formContainer {
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 2rem;
+  border-radius: 10px;
+  border: 2px solid var(--primary-color);
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.8rem;
+  color: var(--primary-color);
+}
+
+.input {
+  background-color: #222;
+  border: 2px solid var(--primary-color);
+  color: var(--text-color);
+  padding: 0.75rem;
+  border-radius: 5px;
+  font-size: 0.8rem;
+}
+
+.submitButton {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  padding: 0.75rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 1rem;
+}
+
+.submitButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px var(--primary-color);
+}
+
+.footer {
+  text-align: center;
+  margin-top: 3rem;
+  padding: 1rem;
+  border-top: 1px solid var(--accent-color);
+  font-size: 0.8rem;
+  color: #999;
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 2rem;
+  }
+  
+  .subtitle {
+    font-size: 1rem;
+  }
+  
+  .logo {
+    height: 40px;
+  }
+  
+  .gameScreen {
+    padding: 1rem;
+  }
+  
+  .gameContent {
+    padding: 1rem;
+  }
+  
+  .playButton {
+    font-size: 1.2rem;
+    padding: 0.5rem 2rem;
+  }
+}

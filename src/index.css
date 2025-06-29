@@ -1,0 +1,29 @@
+:root {
+  --primary-color: #a4ff00;
+  --secondary-color: #000000;
+  --accent-color: #333333;
+  --text-color: #ffffff;
+  --background-color: #121212;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Press Start 2P', system-ui, sans-serif;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
