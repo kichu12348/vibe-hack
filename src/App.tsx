@@ -719,7 +719,7 @@ function App() {
 
       <footer className={styles.footer}>
         <p>© 2025 VIBE CODING HACK+ATHON. All rights reserved.</p>
-        <p>Organized by IEDC CEC & WE Cell</p>
+        <p>Organized by IEDC BOOTCAMP CEC & WE Cell</p>
       </footer>
 
       <Modal
