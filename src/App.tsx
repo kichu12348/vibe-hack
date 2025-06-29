@@ -1,7 +1,18 @@
-import React, { useState } from 'react'
-import './App.css'
-import styles from './App.module.css'
-import { FaCalendarAlt, FaClock, FaMapMarkerAlt, FaRupeeSign, FaGamepad, FaEnvelope, FaPhone, FaUser, FaUsers, FaLaptopCode } from 'react-icons/fa'
+import React, { useState } from "react";
+import "./App.css";
+import styles from "./App.module.css";
+import {
+  FaCalendarAlt,
+  FaClock,
+  FaMapMarkerAlt,
+  FaRupeeSign,
+  FaGamepad,
+  FaEnvelope,
+  FaPhone,
+  FaUser,
+  FaUsers,
+  FaLaptopCode,
+} from "react-icons/fa";
 
 interface FormData {
   name: string;
@@ -15,15 +26,17 @@ interface FormData {
 function App() {
   const [showRegistration, setShowRegistration] = useState(false);
   const [formData, setFormData] = useState<FormData>({
-    name: '',
-    email: '',
-    phone: '',
-    college: '',
-    teamName: '',
-    teamSize: '1',
+    name: "",
+    email: "",
+    phone: "",
+    college: "",
+    teamName: "",
+    teamSize: "1",
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -34,17 +47,17 @@ function App() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Here you would typically send the form data to a server
-    console.log('Form submitted:', formData);
-    alert('Registration successful! We will contact you soon.');
+    console.log("Form submitted:", formData);
+    alert("Registration successful! We will contact you soon.");
     setShowRegistration(false);
     // Reset form
     setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      college: '',
-      teamName: '',
-      teamSize: '1',
+      name: "",
+      email: "",
+      phone: "",
+      college: "",
+      teamName: "",
+      teamSize: "1",
     });
   };
 
@@ -52,12 +65,29 @@ function App() {
     <div className={styles.container}>
       <header className={styles.header}>
         <div className={styles.logoContainer}>
-          <img src="/logos/cec_logo.svg" alt="CEC Logo" className={styles.logo} />
-          <img src="/logos/iedc_logo.svg" alt="IEDC Logo" className={styles.logo} />
-          <img src="/logos/ksum_logo.svg" alt="KSUM Logo" className={styles.logo} />
-          <img src="/logos/we_cell_logo.svg" alt="WE Cell Logo" className={styles.logo} />
+          <img
+            src="/logos/iedc_logo.svg"
+            alt="IEDC Logo"
+            className={styles.logo}
+          />
+          <img
+            src="/logos/ksum_logo.svg"
+            alt="KSUM Logo"
+            className={styles.logo}
+          />
+          <img
+            src="/logos/cec_logo.svg"
+            alt="CEC Logo"
+            className={styles.logo}
+          />
+
+          <img
+            src="/logos/we_cell_logo.svg"
+            alt="WE Cell Logo"
+            className={styles.logo}
+          />
         </div>
-        
+
         <h1 className={styles.title}>
           READY FOR A
           <br />
@@ -73,7 +103,7 @@ function App() {
               <br />
               HACK+ ATHON
             </h2>
-            
+
             <div className={styles.hackathonInfo}>
               <div className={styles.infoItem}>
                 <h3 className={styles.infoTitle}>
@@ -81,7 +111,7 @@ function App() {
                 </h3>
                 <p className={styles.infoValue}>05-06 JULY</p>
               </div>
-              
+
               <div className={styles.infoItem}>
                 <h3 className={styles.infoTitle}>
                   <FaClock /> STARTING TIME
@@ -89,13 +119,13 @@ function App() {
                 <p className={styles.infoValue}>09:00 AM</p>
               </div>
             </div>
-            
+
             <p className={styles.fee}>
               <FaRupeeSign /> REGISTRATION FEE: 150 RS
             </p>
-            
+
             {!showRegistration ? (
-              <button 
+              <button
                 className={styles.playButton}
                 onClick={() => setShowRegistration(true)}
               >
@@ -118,7 +148,7 @@ function App() {
                       className={styles.input}
                     />
                   </div>
-                  
+
                   <div className={styles.formGroup}>
                     <label htmlFor="email" className={styles.label}>
                       <FaEnvelope /> Email
@@ -133,7 +163,7 @@ function App() {
                       className={styles.input}
                     />
                   </div>
-                  
+
                   <div className={styles.formGroup}>
                     <label htmlFor="phone" className={styles.label}>
                       <FaPhone /> Phone Number
@@ -148,7 +178,7 @@ function App() {
                       className={styles.input}
                     />
                   </div>
-                  
+
                   <div className={styles.formGroup}>
                     <label htmlFor="college" className={styles.label}>
                       <FaLaptopCode /> College/Institution
@@ -163,7 +193,7 @@ function App() {
                       className={styles.input}
                     />
                   </div>
-                  
+
                   <div className={styles.formGroup}>
                     <label htmlFor="teamName" className={styles.label}>
                       <FaUsers /> Team Name
@@ -178,7 +208,7 @@ function App() {
                       className={styles.input}
                     />
                   </div>
-                  
+
                   <div className={styles.formGroup}>
                     <label htmlFor="teamSize" className={styles.label}>
                       <FaUsers /> Team Size
@@ -197,14 +227,14 @@ function App() {
                       <option value="4">4</option>
                     </select>
                   </div>
-                  
+
                   <button type="submit" className={styles.submitButton}>
                     REGISTER NOW
                   </button>
                 </form>
               </div>
             )}
-            
+
             <p className={styles.venue}>
               <FaMapMarkerAlt /> VENUE: ONLINE PLATFORM
             </p>
@@ -217,7 +247,7 @@ function App() {
         <p>Organized by IEDC CEC & WE Cell</p>
       </footer>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
