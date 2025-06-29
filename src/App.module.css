@@ -333,6 +333,8 @@ select.input {
   border-radius: 6px;
   padding: 1rem;
   margin-bottom: 1rem;
+  display: grid;
+  gap: 0.75rem;
 }
 
 .userGroup:last-child {
@@ -345,6 +347,14 @@ select.input {
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
+  gap: 0.5rem;
+  grid-column: 1 / -1;
+}
+
+/* Grid layout for user form fields */
+.userGroup .formGroup {
+  display: flex;
+  flex-direction: column;
   gap: 0.5rem;
 }
 

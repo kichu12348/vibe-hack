@@ -28,6 +28,7 @@ interface User {
   name: string;
   email: string;
   phone: string;
+  gender: string;
 }
 
 interface FormData {
@@ -210,7 +211,7 @@ function App() {
     upiId: "",
     transactionId: "",
     paymentScreenshot: null,
-    users: [{ name: "", email: "", phone: "" }],
+    users: [{ name: "", email: "", phone: "", gender: "" }],
   });
 
   const handleInputChange = (
@@ -224,7 +225,7 @@ function App() {
         .fill(null)
         .map(
           (_, index) =>
-            formData.users[index] || { name: "", email: "", phone: "" }
+            formData.users[index] || { name: "", email: "", phone: "", gender: "" }
         );
 
       setFormData({
@@ -283,9 +284,10 @@ function App() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isSubmitting) return; // Prevent multiple submissions
+    if (isSubmitting) return;
     const phoneNoSet = new Set<string>();
     const emailSet = new Set<string>();
+    
     // Validate that all user fields are filled
     for (let i = 0; i < formData.users.length; i++) {
       const user = formData.users[i];
@@ -311,7 +313,7 @@ function App() {
         }
         emailSet.add(user.email);
       }
-      if (!user.name || !user.email || !user.phone) {
+      if (!user.name || !user.email || !user.phone || !user.gender) {
         showModal(
           "Incomplete Information",
           `Please fill all fields for member ${i + 1}`,
@@ -333,7 +335,6 @@ function App() {
 
     try {
       setIsSubmitting(true);
-      // Create FormData object for API submission
       const apiFormData = new FormData();
       apiFormData.append("college", formData.college);
       apiFormData.append("teamName", formData.teamName);
@@ -346,6 +347,7 @@ function App() {
         apiFormData.append(`users[${index}][name]`, user.name);
         apiFormData.append(`users[${index}][email]`, user.email);
         apiFormData.append(`users[${index}][phone]`, user.phone);
+        apiFormData.append(`users[${index}][gender]`, user.gender);
       });
 
       // Only append screenshot if it exists
@@ -376,7 +378,7 @@ function App() {
           upiId: "",
           transactionId: "",
           paymentScreenshot: null,
-          users: [{ name: "", email: "", phone: "" }],
+          users: [{ name: "", email: "", phone: "", gender: "" }],
         });
       } else {
         showModal(
@@ -392,8 +394,7 @@ function App() {
         "Please check your connection and try again.",
         "error"
       );
-    }
-    finally{
+    } finally {
       setIsSubmitting(false);
     }
   };
@@ -405,6 +406,12 @@ function App() {
     { value: "4", label: "4" },
   ];
 
+  const genderOptions: DropdownOption[] = [
+    { value: "male", label: "Male" },
+    { value: "female", label: "Female" },
+    { value: "prefer-not-to-say", label: "Prefer not to say" },
+  ];
+
   const handleDropdownChange = (value: string) => {
     const event = {
       target: {
@@ -414,6 +421,10 @@ function App() {
     } as React.ChangeEvent<HTMLInputElement>;
 
     handleInputChange(event);
+  };
+
+  const handleGenderChange = (index: number, value: string) => {
+    handleUserChange(index, "gender", value);
   };
 
   return (
@@ -585,6 +596,18 @@ function App() {
                             required
                             className={styles.input}
                             placeholder={`+91-`}
+                          />
+                        </div>
+                        <div className={styles.formGroup}>
+                          <label className={styles.label}>
+                            <FaUser /> Gender
+                          </label>
+                          <Dropdown
+                            value={user.gender}
+                            options={genderOptions}
+                            onChange={(value) => handleGenderChange(index, value)}
+                            placeholder="Select gender"
+                            className={styles.input}
                           />
                         </div>
                       </div>
