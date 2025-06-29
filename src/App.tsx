@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
 import styles from "./App.module.css";
 import {
@@ -12,53 +12,408 @@ import {
   FaUser,
   FaUsers,
   FaLaptopCode,
+  FaCreditCard,
+  FaUpload,
+  FaQrcode,
+  FaTimes,
+  FaCheckCircle,
+  FaExclamationTriangle,
+  FaChevronDown,
 } from "react-icons/fa";
 
-interface FormData {
+const API_URL = import.meta.env.VITE_API_URL;
+const UPI_ID = import.meta.env.VITE_UPI_ID;
+
+interface User {
   name: string;
   email: string;
   phone: string;
+}
+
+interface FormData {
   college: string;
   teamName: string;
   teamSize: string;
+  upiId: string;
+  transactionId: string;
+  paymentScreenshot: File | null;
+  users: User[];
 }
+
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  title: string;
+  message: string;
+  type: "success" | "error" | "warning";
+}
+
+const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  title,
+  message,
+  type,
+}) => {
+  if (!isOpen) return null;
+
+  const getIcon = () => {
+    switch (type) {
+      case "success":
+        return <FaCheckCircle className={styles.modalIconSuccess} />;
+      case "error":
+        return <FaExclamationTriangle className={styles.modalIconError} />;
+      case "warning":
+        return <FaExclamationTriangle className={styles.modalIconWarning} />;
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className={styles.modalOverlay} onClick={onClose}>
+      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+        <div className={styles.modalHeader}>
+          <div className={styles.modalTitleContainer}>
+            {getIcon()}
+            <h3 className={styles.modalTitle}>{title}</h3>
+          </div>
+          <button className={styles.modalCloseButton} onClick={onClose}>
+            <FaTimes />
+          </button>
+        </div>
+        <div className={styles.modalBody}>
+          <p className={styles.modalMessage}>{message}</p>
+        </div>
+        <div className={styles.modalFooter}>
+          <button className={styles.modalOkButton} onClick={onClose}>
+            OK
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface DropdownOption {
+  value: string;
+  label: string;
+}
+
+interface DropdownProps {
+  value: string;
+  options: DropdownOption[];
+  onChange: (value: string) => void;
+  placeholder?: string;
+  className?: string;
+}
+
+const Dropdown: React.FC<DropdownProps> = ({
+  value,
+  options,
+  onChange,
+  placeholder = "Select an option",
+  className = "",
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const selectedOption = options.find((option) => option.value === value);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleOptionClick = (optionValue: string) => {
+    onChange(optionValue);
+    setIsOpen(false);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      setIsOpen(!isOpen);
+    } else if (event.key === "Escape") {
+      setIsOpen(false);
+    }
+  };
+
+  return (
+    <div
+      ref={dropdownRef}
+      className={`${styles.dropdown} ${className}`}
+      style={{ padding: 0, border: "none", background: "transparent" }}
+    >
+      <div
+        className={styles.dropdownTrigger}
+        onClick={() => setIsOpen(!isOpen)}
+        onKeyDown={handleKeyDown}
+        tabIndex={0}
+        role="button"
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+      >
+        <span className={styles.dropdownValue}>
+          {selectedOption ? selectedOption.label : placeholder}
+        </span>
+        <FaChevronDown
+          className={`${styles.dropdownIcon} ${
+            isOpen ? styles.dropdownIconOpen : ""
+          }`}
+        />
+      </div>
+
+      {isOpen && (
+        <div className={styles.dropdownMenu} role="listbox">
+          {options.map((option) => (
+            <div
+              key={option.value}
+              className={`${styles.dropdownOption} ${
+                option.value === value ? styles.dropdownOptionSelected : ""
+              }`}
+              onClick={() => handleOptionClick(option.value)}
+              role="option"
+              aria-selected={option.value === value}
+            >
+              {option.label}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 function App() {
   const [showRegistration, setShowRegistration] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [modal, setModal] = useState({
+    isOpen: false,
+    title: "",
+    message: "",
+    type: "success" as "success" | "error" | "warning",
+  });
   const [formData, setFormData] = useState<FormData>({
-    name: "",
-    email: "",
-    phone: "",
     college: "",
     teamName: "",
     teamSize: "1",
+    upiId: "",
+    transactionId: "",
+    paymentScreenshot: null,
+    users: [{ name: "", email: "", phone: "" }],
   });
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
+
+    if (name === "teamSize") {
+      const newTeamSize = parseInt(value);
+      const newUsers = Array(newTeamSize)
+        .fill(null)
+        .map(
+          (_, index) =>
+            formData.users[index] || { name: "", email: "", phone: "" }
+        );
+
+      setFormData({
+        ...formData,
+        [name]: value,
+        users: newUsers,
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
+  };
+
+  const handleUserChange = (
+    index: number,
+    field: keyof User,
+    value: string
+  ) => {
+    const newUsers = [...formData.users];
+    newUsers[index] = { ...newUsers[index], [field]: value };
     setFormData({
       ...formData,
-      [name]: value,
+      users: newUsers,
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Here you would typically send the form data to a server
-    console.log("Form submitted:", formData);
-    alert("Registration successful! We will contact you soon.");
-    setShowRegistration(false);
-    // Reset form
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
     setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      college: "",
-      teamName: "",
-      teamSize: "1",
+      ...formData,
+      paymentScreenshot: file,
     });
+  };
+
+  const showModal = (
+    title: string,
+    message: string,
+    type: "success" | "error" | "warning" = "success"
+  ) => {
+    setModal({
+      isOpen: true,
+      title,
+      message,
+      type,
+    });
+  };
+
+  const closeModal = () => {
+    setModal({
+      ...modal,
+      isOpen: false,
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (isSubmitting) return; // Prevent multiple submissions
+    const phoneNoSet = new Set<string>();
+    const emailSet = new Set<string>();
+    // Validate that all user fields are filled
+    for (let i = 0; i < formData.users.length; i++) {
+      const user = formData.users[i];
+      if (user.phone) {
+        if (phoneNoSet.has(user.phone)) {
+          showModal(
+            "Duplicate Phone Number",
+            `Phone number ${user.phone} is already used by another member.`,
+            "warning"
+          );
+          return;
+        }
+        phoneNoSet.add(user.phone);
+      }
+      if (user.email) {
+        if (emailSet.has(user.email)) {
+          showModal(
+            "Duplicate Email",
+            `Email ${user.email} is already used by another member.`,
+            "warning"
+          );
+          return;
+        }
+        emailSet.add(user.email);
+      }
+      if (!user.name || !user.email || !user.phone) {
+        showModal(
+          "Incomplete Information",
+          `Please fill all fields for member ${i + 1}`,
+          "warning"
+        );
+        return;
+      }
+    }
+
+    // Validate that either transaction ID or payment screenshot is provided
+    if (!formData.transactionId && !formData.paymentScreenshot) {
+      showModal(
+        "Payment Required",
+        "Please provide either transaction ID or payment screenshot",
+        "warning"
+      );
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      // Create FormData object for API submission
+      const apiFormData = new FormData();
+      apiFormData.append("college", formData.college);
+      apiFormData.append("teamName", formData.teamName);
+      apiFormData.append("teamSize", formData.teamSize);
+      apiFormData.append("upiId", formData.upiId);
+      apiFormData.append("transactionId", formData.transactionId);
+
+      // Add user data
+      formData.users.forEach((user, index) => {
+        apiFormData.append(`users[${index}][name]`, user.name);
+        apiFormData.append(`users[${index}][email]`, user.email);
+        apiFormData.append(`users[${index}][phone]`, user.phone);
+      });
+
+      // Only append screenshot if it exists
+      if (formData.paymentScreenshot) {
+        apiFormData.append("paymentScreenshot", formData.paymentScreenshot);
+      }
+
+      // Submit to backend API
+      const response = await fetch(`${API_URL}/register`, {
+        method: "POST",
+        body: apiFormData,
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        showModal(
+          "Registration Successful!",
+          "Your registration has been submitted successfully. Your payment will be verified soon.",
+          "success"
+        );
+        setShowRegistration(false);
+        // Reset form
+        setFormData({
+          college: "",
+          teamName: "",
+          teamSize: "1",
+          upiId: "",
+          transactionId: "",
+          paymentScreenshot: null,
+          users: [{ name: "", email: "", phone: "" }],
+        });
+      } else {
+        showModal(
+          "Registration Failed",
+          result.error || "Registration failed. Please try again.",
+          "error"
+        );
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+      showModal(
+        "Network Error",
+        "Please check your connection and try again.",
+        "error"
+      );
+    }
+    finally{
+      setIsSubmitting(false);
+    }
+  };
+
+  const teamSizeOptions: DropdownOption[] = [
+    { value: "1", label: "1 (Individual)" },
+    { value: "2", label: "2" },
+    { value: "3", label: "3" },
+    { value: "4", label: "4" },
+  ];
+
+  const handleDropdownChange = (value: string) => {
+    const event = {
+      target: {
+        name: "teamSize",
+        value: value,
+      },
+    } as React.ChangeEvent<HTMLInputElement>;
+
+    handleInputChange(event);
   };
 
   return (
@@ -135,51 +490,6 @@ function App() {
               <div className={styles.formContainer}>
                 <form className={styles.form} onSubmit={handleSubmit}>
                   <div className={styles.formGroup}>
-                    <label htmlFor="name" className={styles.label}>
-                      <FaUser /> Full Name
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      required
-                      className={styles.input}
-                    />
-                  </div>
-
-                  <div className={styles.formGroup}>
-                    <label htmlFor="email" className={styles.label}>
-                      <FaEnvelope /> Email
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      required
-                      className={styles.input}
-                    />
-                  </div>
-
-                  <div className={styles.formGroup}>
-                    <label htmlFor="phone" className={styles.label}>
-                      <FaPhone /> Phone Number
-                    </label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      required
-                      className={styles.input}
-                    />
-                  </div>
-
-                  <div className={styles.formGroup}>
                     <label htmlFor="college" className={styles.label}>
                       <FaLaptopCode /> College/Institution
                     </label>
@@ -213,23 +523,165 @@ function App() {
                     <label htmlFor="teamSize" className={styles.label}>
                       <FaUsers /> Team Size
                     </label>
-                    <select
-                      id="teamSize"
-                      name="teamSize"
+                    <Dropdown
                       value={formData.teamSize}
-                      onChange={handleInputChange}
-                      required
+                      options={teamSizeOptions}
+                      onChange={handleDropdownChange}
+                      placeholder="Select team size"
                       className={styles.input}
-                    >
-                      <option value="1">1 (Individual)</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                    </select>
+                    />
                   </div>
 
-                  <button type="submit" className={styles.submitButton}>
-                    REGISTER NOW
+                  {/* Team Members Section */}
+                  <div className={styles.teamMembersSection}>
+                    <h3 className={styles.sectionTitle}>
+                      <FaUsers /> Team Members
+                    </h3>
+                    {formData.users.map((user, index) => (
+                      <div key={index} className={styles.userGroup}>
+                        <h4 className={styles.userTitle}>
+                          <FaUser /> Member {index + 1}
+                        </h4>
+                        <div className={styles.formGroup}>
+                          <label className={styles.label}>
+                            <FaUser /> Full Name
+                          </label>
+                          <input
+                            type="text"
+                            value={user.name}
+                            onChange={(e) =>
+                              handleUserChange(index, "name", e.target.value)
+                            }
+                            required
+                            className={styles.input}
+                            placeholder={`name`}
+                          />
+                        </div>
+                        <div className={styles.formGroup}>
+                          <label className={styles.label}>
+                            <FaEnvelope /> Email
+                          </label>
+                          <input
+                            type="email"
+                            value={user.email}
+                            onChange={(e) =>
+                              handleUserChange(index, "email", e.target.value)
+                            }
+                            required
+                            className={styles.input}
+                            placeholder={`email`}
+                          />
+                        </div>
+                        <div className={styles.formGroup}>
+                          <label className={styles.label}>
+                            <FaPhone /> Phone Number
+                          </label>
+                          <input
+                            type="tel"
+                            value={user.phone}
+                            onChange={(e) =>
+                              handleUserChange(index, "phone", e.target.value)
+                            }
+                            required
+                            className={styles.input}
+                            placeholder={`+91-`}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Payment Section */}
+                  <div className={styles.paymentSection}>
+                    <h3 className={styles.sectionTitle}>
+                      <FaQrcode /> Payment Details
+                    </h3>
+                    <p className={styles.paymentInstructions}>
+                      Pay ₹150 via UPI and provide either transaction ID or
+                      upload payment screenshot
+                    </p>
+
+                    <div className={styles.upiDetails}>
+                      <p>
+                        <strong>CLICK TO COPY UPI ID:</strong>{" "}
+                        <a
+                          onClick={() => navigator.clipboard.writeText(UPI_ID)}
+                          className={styles.upiId}
+                        >
+                          {UPI_ID}
+                        </a>
+                      </p>
+                      <p>
+                        <strong>Amount:</strong> ₹150
+                      </p>
+                      <div className={styles.qrContainer}>
+                        <p>
+                          <strong>Scan to Pay:</strong>
+                        </p>
+                        <img
+                          src="/qr/qr.jpeg"
+                          alt="UPI Payment QR Code"
+                          className={styles.qrCode}
+                        />
+                      </div>
+                    </div>
+
+                    <div className={styles.formGroup}>
+                      <label htmlFor="upiId" className={styles.label}>
+                        <FaCreditCard /> Your UPI ID (used for payment)
+                      </label>
+                      <input
+                        type="text"
+                        id="upiId"
+                        name="upiId"
+                        value={formData.upiId}
+                        onChange={handleInputChange}
+                        placeholder="yourname@oksbi"
+                        required
+                        className={styles.input}
+                      />
+                    </div>
+
+                    <div className={styles.formGroup}>
+                      <label htmlFor="transactionId" className={styles.label}>
+                        <FaCreditCard /> Transaction ID
+                      </label>
+                      <input
+                        type="text"
+                        id="transactionId"
+                        name="transactionId"
+                        value={formData.transactionId}
+                        onChange={handleInputChange}
+                        placeholder="Enter transaction ID from payment"
+                        className={styles.input}
+                      />
+                    </div>
+
+                    <div className={styles.formGroup}>
+                      <label
+                        htmlFor="paymentScreenshot"
+                        className={styles.label}
+                      >
+                        <FaUpload /> Payment Screenshot
+                      </label>
+                      <input
+                        type="file"
+                        id="paymentScreenshot"
+                        name="paymentScreenshot"
+                        onChange={handleFileChange}
+                        accept="image/*"
+                        className={styles.fileInput}
+                      />
+                      {formData.paymentScreenshot && (
+                        <p className={styles.fileName}>
+                          Selected: {formData.paymentScreenshot.name}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
+                    {isSubmitting ? "REGISTERING..." : "REGISTER NOW"}
                   </button>
                 </form>
               </div>
@@ -246,6 +698,14 @@ function App() {
         <p>© 2025 VIBE CODING HACK+ATHON. All rights reserved.</p>
         <p>Organized by IEDC CEC & WE Cell</p>
       </footer>
+
+      <Modal
+        isOpen={modal.isOpen}
+        onClose={closeModal}
+        title={modal.title}
+        message={modal.message}
+        type={modal.type}
+      />
     </div>
   );
 }

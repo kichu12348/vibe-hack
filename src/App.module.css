@@ -48,28 +48,33 @@
   background-color: var(--accent-color);
   border: 4px solid var(--primary-color);
   border-radius: 10px;
-  padding: 2rem;
-  max-width: 800px;
+  padding: 1rem;
+  max-width: 100%;
   margin: 0 auto 3rem;
   position: relative;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .gameContent {
-  padding: 2rem;
+  padding: 1rem;
   background-color: #0f0f0f;
   border-radius: 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .hackathonInfo {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
   margin-bottom: 2rem;
+  width: 100%;
 }
 
 .infoItem {
@@ -124,15 +129,17 @@
   padding: 2rem;
   border-radius: 10px;
   border: 2px solid var(--primary-color);
-  max-width: 600px;
+  max-width: 100%;
   width: 100%;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
+  width: 100%;
 }
 
 .formGroup {
@@ -144,6 +151,7 @@
 .label {
   font-size: 0.8rem;
   color: var(--primary-color);
+  margin-top: 0.5rem;
 }
 
 .input {
@@ -152,7 +160,27 @@
   color: var(--text-color);
   padding: 0.75rem;
   border-radius: 5px;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 44px; /* Improved touch target for mobile */
+}
+
+/* Style select elements specifically */
+.input:focus {
+  outline: none;
+  border-color: #00ffff;
+  box-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+}
+
+select.input {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300ff00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+  padding-right: 3rem;
 }
 
 .submitButton {
@@ -172,6 +200,154 @@
   box-shadow: 0 0 10px var(--primary-color);
 }
 
+.paymentSection {
+  background-color: rgba(255, 215, 0, 0.1);
+  border: 2px solid var(--primary-color);
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.paymentInstructions {
+  font-size: 0.9rem;
+  color: var(--text-color);
+  margin-bottom: 1rem;
+  text-align: center;
+  background-color: rgba(255, 215, 0, 0.2);
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+
+.upiDetails {
+  background-color: rgba(0, 255, 0, 0.1);
+  border: 1px solid #00ff00;
+  border-radius: 5px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.upiDetails p {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  color: var(--text-color);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.upiId {
+  color: #00ff00;
+  font-size: 1rem;
+  text-align: center;
+  font-family: 'Courier New', Courier, monospace;
+  cursor: pointer;
+}
+
+
+.qrContainer {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 2px solid var(--primary-color);
+  border-radius: 8px;
+  display: inline-block;
+  box-shadow: 0 0 10px rgba(164, 255, 0, 0.3);
+}
+
+.qrContainer p {
+  color: var(--primary-color) !important;
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 5px rgba(164, 255, 0, 0.5);
+}
+
+.qrCode {
+  width: 150px;
+  height: 150px;
+  border-radius: 5px;
+  display: block;
+  margin: 0 auto;
+  border: 2px solid var(--primary-color);
+  background-color: white;
+  padding: 4px;
+  filter: drop-shadow(0 0 8px rgba(164, 255, 0, 0.4));
+}
+
+.fileInput {
+  background-color: #222;
+  border: 2px solid var(--primary-color);
+  color: var(--text-color);
+  padding: 0.75rem;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.fileInput::-webkit-file-upload-button {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-right: 1rem;
+}
+
+.fileName {
+  font-size: 0.8rem;
+  color: var(--primary-color);
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+.teamMembersSection {
+  background-color: rgba(0, 255, 255, 0.1);
+  border: 2px solid #00ffff;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.userGroup {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid #555;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.userGroup:last-child {
+  margin-bottom: 0;
+}
+
+.userTitle {
+  font-size: 0.9rem;
+  color: #00ffff;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .footer {
   text-align: center;
   margin-top: 3rem;
@@ -181,9 +357,242 @@
   color: #999;
 }
 
+/* Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modalContent {
+  background-color: var(--secondary-color);
+  border: 3px solid var(--primary-color);
+  border-radius: 10px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    transform: scale(0.7) translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 2px solid var(--primary-color);
+  background-color: rgba(164, 255, 0, 0.1);
+}
+
+.modalTitleContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.modalTitle {
+  font-size: 0.9rem;
+  color: var(--primary-color);
+  margin: 0;
+}
+
+.modalIconSuccess {
+  color: #00ff00;
+  font-size: 1.2rem;
+}
+
+.modalIconError {
+  color: #ff4444;
+  font-size: 1.2rem;
+}
+
+.modalIconWarning {
+  color: #ffaa00;
+  font-size: 1.2rem;
+}
+
+.modalCloseButton {
+  background: none;
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  font-size: 0.8rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+}
+
+.modalCloseButton:hover {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  transform: scale(1.1);
+}
+
+.modalBody {
+  padding: 1.5rem;
+}
+
+.modalMessage {
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--text-color);
+  margin: 0;
+  text-align: center;
+}
+
+.modalFooter {
+  padding: 1rem;
+  border-top: 2px solid var(--primary-color);
+  display: flex;
+  justify-content: center;
+}
+
+.modalOkButton {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.modalOkButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px var(--primary-color);
+}
+
+/* Custom Dropdown Styles */
+.dropdown {
+  position: relative;
+  width: 100%;
+}
+
+.dropdownTrigger {
+  background-color: #222;
+  border: 2px solid var(--primary-color);
+  color: var(--text-color);
+  padding: 0.75rem;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 44px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.dropdownTrigger:hover {
+  border-color: #00ffff;
+}
+
+.dropdownTrigger:focus {
+  outline: none;
+  border-color: #00ffff;
+  box-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+}
+
+.dropdownValue {
+  flex: 1;
+  text-align: left;
+}
+
+.dropdownIcon {
+  color: var(--primary-color);
+  font-size: 0.8rem;
+  transition: transform 0.2s;
+  margin-left: 0.5rem;
+}
+
+.dropdownIconOpen {
+  transform: rotate(180deg);
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #222;
+  border: 2px solid var(--primary-color);
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dropdownOption {
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-bottom: 1px solid #333;
+  font-size: 0.9rem;
+}
+
+.dropdownOption:last-child {
+  border-bottom: none;
+}
+
+.dropdownOption:hover {
+  background-color: rgba(164, 255, 0, 0.1);
+  color: var(--primary-color);
+}
+
+.dropdownOptionSelected {
+  background-color: rgba(164, 255, 0, 0.2);
+  color: var(--primary-color);
+}
+
+.dropdownOptionSelected:hover {
+  background-color: rgba(164, 255, 0, 0.3);
+}
+
+/* Remove old select styling */
+select.input {
+  display: none;
+}
+
 @media (max-width: 768px) {
+  .container {
+    padding: 1rem 0.5rem;
+  }
+
   .title {
     font-size: 2rem;
+    line-height: 1.1;
   }
   
   .subtitle {
@@ -191,11 +600,17 @@
   }
   
   .logo {
-    height: 30px;
+    height: 40px;
+  }
+  
+  .logoContainer {
+    gap: 1rem;
   }
   
   .gameScreen {
-    padding: 1rem;
+    padding: 0.5rem;
+    border-width: 2px;
+    margin: 0 auto 2rem;
   }
   
   .gameContent {
@@ -205,5 +620,215 @@
   .playButton {
     font-size: 1.2rem;
     padding: 0.5rem 2rem;
+  }
+
+  .formContainer {
+    padding: 1rem;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .form {
+    gap: 0.75rem;
+  }
+
+  .hackathonInfo {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .infoItem {
+    padding: 0.75rem;
+  }
+
+  .teamMembersSection,
+  .paymentSection {
+    padding: 0.75rem;
+    margin: 0.75rem 0;
+  }
+
+  .userGroup {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .label {
+    font-size: 0.9rem;
+  }
+
+  .input {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .submitButton {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .sectionTitle {
+    font-size: 0.9rem;
+  }
+
+  .userTitle {
+    font-size: 0.8rem;
+  }
+
+  .paymentInstructions {
+    font-size: 0.8rem;
+  }
+
+  .upiDetails {
+    padding: 0.75rem;
+  }
+
+  .upiDetails p {
+    font-size: 0.8rem;
+  }
+
+  .qrCode {
+    width: 120px;
+    height: 120px;
+  }
+
+  .qrContainer {
+    padding: 0.75rem;
+  }
+  
+  .modalContent {
+    width: 95%;
+    max-width: none;
+    margin: 1rem;
+  }
+  
+  .modalHeader {
+    padding: 0.75rem;
+  }
+  
+  .modalTitle {
+    font-size: 0.8rem;
+  }
+  
+  .modalBody {
+    padding: 1rem;
+  }
+  
+  .modalMessage {
+    font-size: 0.7rem;
+  }
+  
+  .modalFooter {
+    padding: 0.75rem;
+  }
+  
+  .modalOkButton {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.7rem;
+  }
+  
+  .modalCloseButton {
+    width: 30px;
+    height: 30px;
+    font-size: 0.7rem;
+  }
+
+  .dropdownTrigger {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .dropdownOption {
+    padding: 0.6rem;
+    font-size: 0.8rem;
+  }
+  
+  .dropdownIcon {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0.5rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+  }
+
+  .logo {
+    height: 30px;
+  }
+
+  .formContainer {
+    padding: 0.75rem;
+  }
+
+  .teamMembersSection,
+  .paymentSection {
+    padding: 0.5rem;
+  }
+
+  .userGroup {
+    padding: 0.5rem;
+  }
+
+  .input {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .label {
+    font-size: 0.8rem;
+  }
+
+  .playButton {
+    font-size: 1rem;
+    padding: 0.5rem 1.5rem;
+  }
+
+  .submitButton {
+    padding: 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .qrCode {
+    width: 100px;
+    height: 100px;
+  }
+
+  .qrContainer {
+    padding: 0.5rem;
+  }
+  
+  .modalContent {
+    width: 98%;
+    margin: 0.5rem;
+  }
+  
+  .modalHeader {
+    padding: 0.5rem;
+  }
+  
+  .modalBody {
+    padding: 0.75rem;
+  }
+  
+  .modalFooter {
+    padding: 0.5rem;
+  }
+
+  .dropdownTrigger {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+  
+  .dropdownOption {
+    padding: 0.5rem;
+    font-size: 0.7rem;
   }
 }
