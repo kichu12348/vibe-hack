@@ -19,10 +19,12 @@ import {
   FaCheckCircle,
   FaExclamationTriangle,
   FaChevronDown,
+  FaWhatsapp
 } from "react-icons/fa";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const UPI_ID = import.meta.env.VITE_UPI_ID;
+const whatsAppUrl = import.meta.env.VITE_WHATSAPP_URL;
 
 interface User {
   name: string;
@@ -47,6 +49,7 @@ interface ModalProps {
   title: string;
   message: string;
   type: "success" | "error" | "warning";
+  showWhatsAppLink?: boolean;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -55,6 +58,7 @@ const Modal: React.FC<ModalProps> = ({
   title,
   message,
   type,
+  showWhatsAppLink = false,
 }) => {
   if (!isOpen) return null;
 
@@ -69,6 +73,10 @@ const Modal: React.FC<ModalProps> = ({
       default:
         return null;
     }
+  };
+
+  const handleWhatsAppClick = () => {
+    window.open(whatsAppUrl, '_blank');
   };
 
   return (
@@ -87,6 +95,15 @@ const Modal: React.FC<ModalProps> = ({
           <p className={styles.modalMessage}>{message}</p>
         </div>
         <div className={styles.modalFooter}>
+          {showWhatsAppLink && (
+            <button 
+              className={styles.modalWhatsAppButton} 
+              onClick={handleWhatsAppClick}
+            >
+              <FaWhatsapp className={styles.modalWhatsAppIcon} />
+              Join WhatsApp Group
+            </button>
+          )}
           <button className={styles.modalOkButton} onClick={onClose}>
             OK
           </button>
@@ -203,6 +220,7 @@ function App() {
     title: "",
     message: "",
     type: "success" as "success" | "error" | "warning",
+    showWhatsAppLink: false,
   });
   const [formData, setFormData] = useState<FormData>({
     college: "",
@@ -265,13 +283,15 @@ function App() {
   const showModal = (
     title: string,
     message: string,
-    type: "success" | "error" | "warning" = "success"
+    type: "success" | "error" | "warning" = "success",
+    showWhatsAppLink: boolean = false
   ) => {
     setModal({
       isOpen: true,
       title,
       message,
       type,
+      showWhatsAppLink,
     });
   };
 
@@ -366,8 +386,9 @@ function App() {
       if (response.ok) {
         showModal(
           "Registration Successful!",
-          "Your registration has been submitted successfully. Your payment will be verified soon.",
-          "success"
+          "Your registration has been submitted successfully. Your payment will be verified soon. Join our WhatsApp group for updates and announcements!",
+          "success",
+          true
         );
         setShowRegistration(false);
         // Reset form
@@ -728,6 +749,7 @@ function App() {
         title={modal.title}
         message={modal.message}
         type={modal.type}
+        showWhatsAppLink={modal.showWhatsAppLink}
       />
     </div>
   );
