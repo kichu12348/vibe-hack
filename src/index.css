@@ -40,3 +40,15 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+
+@media  screen and (max-width: 768px) {
+  *{
+    scrollbar-width: none;
+    -ms-overflow-style: none; /* IE and Edge */
+    ::-webkit-scrollbar {
+      display: none; /* Chrome, Safari and Opera */
+    }
+  }
+    
+}
