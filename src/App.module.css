@@ -624,6 +624,31 @@ select.input {
   display: none;
 }
 
+.modalIconLoading {
+  font-size: 1.2rem;
+  animation: modalPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes modalPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.7;
+  }
+}
+
+/* Make modal non-closable when loading */
+.modalOverlay[data-loading="true"] {
+  pointer-events: none;
+}
+
+.modalOverlay[data-loading="true"] .modalContent {
+  pointer-events: all;
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 1rem 0.5rem;

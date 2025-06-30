@@ -49,8 +49,9 @@ interface ModalProps {
   onClose: () => void;
   title: string;
   message: string;
-  type: "success" | "error" | "warning";
+  type: "success" | "error" | "warning" | "loading";
   showWhatsAppLink?: boolean;
+  isLoading?: boolean;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -60,6 +61,7 @@ const Modal: React.FC<ModalProps> = ({
   message,
   type,
   showWhatsAppLink = false,
+  isLoading = false,
 }) => {
   if (!isOpen) return null;
 
@@ -71,6 +73,8 @@ const Modal: React.FC<ModalProps> = ({
         return <FaExclamationTriangle className={styles.modalIconError} />;
       case "warning":
         return <FaExclamationTriangle className={styles.modalIconWarning} />;
+      case "loading":
+        return <div className={styles.modalIconLoading}>⏳</div>;
       default:
         return null;
     }
@@ -81,16 +85,18 @@ const Modal: React.FC<ModalProps> = ({
   };
 
   return (
-    <div className={styles.modalOverlay} onClick={onClose}>
+    <div className={styles.modalOverlay} onClick={isLoading ? undefined : onClose}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
           <div className={styles.modalTitleContainer}>
             {getIcon()}
             <h3 className={styles.modalTitle}>{title}</h3>
           </div>
-          <button className={styles.modalCloseButton} onClick={onClose}>
-            <FaTimes />
-          </button>
+          {!isLoading && (
+            <button className={styles.modalCloseButton} onClick={onClose}>
+              <FaTimes />
+            </button>
+          )}
         </div>
         <div className={styles.modalBody}>
           <p className={styles.modalMessage}>{message}</p>
@@ -105,9 +111,11 @@ const Modal: React.FC<ModalProps> = ({
               Join WhatsApp Group
             </button>
           )}
-          <button className={styles.modalOkButton} onClick={onClose}>
-            OK
-          </button>
+          {!isLoading && (
+            <button className={styles.modalOkButton} onClick={onClose}>
+              OK
+            </button>
+          )}
         </div>
       </div>
     </div>
@@ -220,8 +228,9 @@ function App() {
     isOpen: false,
     title: "",
     message: "",
-    type: "success" as "success" | "error" | "warning",
+    type: "success" as "success" | "error" | "warning" | "loading",
     showWhatsAppLink: false,
+    isLoading: false,
   });
   const [formData, setFormData] = useState<FormData>({
     college: "",
@@ -284,8 +293,9 @@ function App() {
   const showModal = (
     title: string,
     message: string,
-    type: "success" | "error" | "warning" = "success",
-    showWhatsAppLink: boolean = false
+    type: "success" | "error" | "warning" | "loading" = "success",
+    showWhatsAppLink: boolean = false,
+    isLoading: boolean = false
   ) => {
     setModal({
       isOpen: true,
@@ -293,6 +303,7 @@ function App() {
       message,
       type,
       showWhatsAppLink,
+      isLoading,
     });
   };
 
@@ -356,6 +367,13 @@ function App() {
 
     try {
       setIsSubmitting(true);
+      showModal(
+        "Processing Registration...",
+        "Your registration is being processed. While you wait, join our WhatsApp group for updates and connect with other participants!",
+        "loading",
+        true,
+        true
+      );
       const apiFormData = new FormData();
       apiFormData.append("college", formData.college);
       apiFormData.append("teamName", formData.teamName);
@@ -758,6 +776,7 @@ function App() {
         message={modal.message}
         type={modal.type}
         showWhatsAppLink={modal.showWhatsAppLink}
+        isLoading={modal.isLoading}
       />
     </div>
   );
