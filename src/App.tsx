@@ -19,7 +19,8 @@ import {
   FaCheckCircle,
   FaExclamationTriangle,
   FaChevronDown,
-  FaWhatsapp
+  FaWhatsapp,
+  FaTrophy
 } from "react-icons/fa";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -504,6 +505,13 @@ function App() {
                   <FaClock /> STARTING TIME
                 </h3>
                 <p className={styles.infoValue}>09:00 AM</p>
+              </div>
+
+              <div className={styles.infoItem}>
+                <h3 className={styles.infoTitle}>
+                  <FaTrophy /> PRIZE POOL
+                </h3>
+                <p className={styles.infoValue}>₹1,500</p>
               </div>
             </div>
 
