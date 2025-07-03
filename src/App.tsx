@@ -529,7 +529,7 @@ function App() {
                 <h3 className={styles.infoTitle}>
                   <FaTrophy /> PRIZE POOL
                 </h3>
-                <p className={styles.infoValue}>₹2,000</p>
+                <p className={styles.infoValue}>₹1,500</p>
               </div>
             </div>
 
