@@ -20,8 +20,11 @@ import {
   FaExclamationTriangle,
   FaChevronDown,
   FaWhatsapp,
-  FaTrophy
+  FaTrophy,
+  FaBan,
 } from "react-icons/fa";
+import { CiWarning } from "react-icons/ci";
+import { FaRegHourglassHalf } from "react-icons/fa6";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const UPI_ID = import.meta.env.VITE_UPI_ID;
@@ -74,18 +77,21 @@ const Modal: React.FC<ModalProps> = ({
       case "warning":
         return <FaExclamationTriangle className={styles.modalIconWarning} />;
       case "loading":
-        return <div className={styles.modalIconLoading}>⏳</div>;
+        return <FaRegHourglassHalf className={styles.modalIconLoading} />;
       default:
         return null;
     }
   };
 
   const handleWhatsAppClick = () => {
-    window.open(whatsAppUrl, '_blank');
+    window.open(whatsAppUrl, "_blank");
   };
 
   return (
-    <div className={styles.modalOverlay} onClick={isLoading ? undefined : onClose}>
+    <div
+      className={styles.modalOverlay}
+      onClick={isLoading ? undefined : onClose}
+    >
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
           <div className={styles.modalTitleContainer}>
@@ -103,8 +109,8 @@ const Modal: React.FC<ModalProps> = ({
         </div>
         <div className={styles.modalFooter}>
           {showWhatsAppLink && (
-            <button 
-              className={styles.modalWhatsAppButton} 
+            <button
+              className={styles.modalWhatsAppButton}
               onClick={handleWhatsAppClick}
             >
               <FaWhatsapp className={styles.modalWhatsAppIcon} />
@@ -223,7 +229,10 @@ const Dropdown: React.FC<DropdownProps> = ({
 
 function App() {
   const [showRegistration, setShowRegistration] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isRegistrationClosed, setIsRegistrationClosed] = useState(
+    new Date() > new Date("2025-07-04T23:59:59")
+  );
   const [modal, setModal] = useState({
     isOpen: false,
     title: "",
@@ -253,7 +262,12 @@ function App() {
         .fill(null)
         .map(
           (_, index) =>
-            formData.users[index] || { name: "", email: "", phone: "", gender: "" }
+            formData.users[index] || {
+              name: "",
+              email: "",
+              phone: "",
+              gender: "",
+            }
         );
 
       setFormData({
@@ -319,7 +333,16 @@ function App() {
     if (isSubmitting) return;
     const phoneNoSet = new Set<string>();
     const emailSet = new Set<string>();
-    
+
+    if (isRegistrationClosed) {
+      showModal(
+        "Registration Closed",
+        "Registration deadline has passed on July 5th, 2025. We appreciate your interest!",
+        "warning"
+      );
+      return;
+    }
+
     // Validate that all user fields are filled
     for (let i = 0; i < formData.users.length; i++) {
       const user = formData.users[i];
@@ -467,6 +490,37 @@ function App() {
     handleUserChange(index, "gender", value);
   };
 
+  // Check if registration is closed
+  useEffect(() => {
+    const checkRegistrationDeadline = () => {
+      const now = new Date();
+      const deadline = new Date("2025-07-04T23:59:59"); // July 4th, 2025 at 11:59:59 PM
+
+      if (now > deadline) {
+        setIsRegistrationClosed(true);
+        setShowRegistration(false);
+      }
+    };
+
+    checkRegistrationDeadline();
+    // Check every minute to ensure real-time updates
+    const interval = setInterval(checkRegistrationDeadline, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const handlePlayButtonClick = () => {
+    if (isRegistrationClosed) {
+      showModal(
+        "Registration Closed",
+        "Registration deadline has passed on July 5th, 2025. We appreciate your interest!",
+        "warning"
+      );
+      return;
+    }
+    setShowRegistration(true);
+  };
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -537,224 +591,271 @@ function App() {
               <FaRupeeSign /> REGISTRATION FEE: 150 RS
             </p>
 
-            {!showRegistration ? (
-              <button
-                className={styles.playButton}
-                onClick={() => setShowRegistration(true)}
-              >
-                <FaGamepad /> PLAY
-              </button>
+            {isRegistrationClosed ? (
+              <div className={styles.registrationClosed}>
+                <h3 className={styles.registrationClosedTitle}>
+                  <FaBan /> REGISTRATION CLOSED
+                </h3>
+                <p className={styles.registrationClosedMessage}>
+                  Registration deadline has passed on July 5th, 2025.
+                  <br />
+                  Thank you for your interest in the VIBE CODING HACK+ATHON!
+                </p>
+              </div>
             ) : (
-              <div className={styles.formContainer}>
-                <form className={styles.form} onSubmit={handleSubmit}>
-                  <div className={styles.formGroup}>
-                    <label htmlFor="college" className={styles.label}>
-                      <FaLaptopCode /> College/Institution
-                    </label>
-                    <input
-                      type="text"
-                      id="college"
-                      name="college"
-                      value={formData.college}
-                      onChange={handleInputChange}
-                      required
-                      className={styles.input}
-                    />
+              <>
+                {!showRegistration && (
+                  <div className={styles.deadlineNotice}>
+                    <p className={styles.deadlineText}>
+                      <CiWarning size={28} /> Registration closes on July 4th,
+                      2025 at 11:59 PM
+                    </p>
                   </div>
+                )}
 
-                  <div className={styles.formGroup}>
-                    <label htmlFor="teamName" className={styles.label}>
-                      <FaUsers /> Team Name
-                    </label>
-                    <input
-                      type="text"
-                      id="teamName"
-                      name="teamName"
-                      value={formData.teamName}
-                      onChange={handleInputChange}
-                      required
-                      className={styles.input}
-                    />
-                  </div>
+                {!showRegistration ? (
+                  <button
+                    className={styles.playButton}
+                    onClick={handlePlayButtonClick}
+                  >
+                    <FaGamepad /> PLAY
+                  </button>
+                ) : (
+                  <div className={styles.formContainer}>
+                    <form className={styles.form} onSubmit={handleSubmit}>
+                      <div className={styles.formGroup}>
+                        <label htmlFor="college" className={styles.label}>
+                          <FaLaptopCode /> College/Institution
+                        </label>
+                        <input
+                          type="text"
+                          id="college"
+                          name="college"
+                          value={formData.college}
+                          onChange={handleInputChange}
+                          required
+                          className={styles.input}
+                        />
+                      </div>
 
-                  <div className={styles.formGroup}>
-                    <label htmlFor="teamSize" className={styles.label}>
-                      <FaUsers /> Team Size
-                    </label>
-                    <Dropdown
-                      value={formData.teamSize}
-                      options={teamSizeOptions}
-                      onChange={handleDropdownChange}
-                      placeholder="Select team size"
-                      className={styles.input}
-                    />
-                  </div>
+                      <div className={styles.formGroup}>
+                        <label htmlFor="teamName" className={styles.label}>
+                          <FaUsers /> Team Name
+                        </label>
+                        <input
+                          type="text"
+                          id="teamName"
+                          name="teamName"
+                          value={formData.teamName}
+                          onChange={handleInputChange}
+                          required
+                          className={styles.input}
+                        />
+                      </div>
 
-                  {/* Team Members Section */}
-                  <div className={styles.teamMembersSection}>
-                    <h3 className={styles.sectionTitle}>
-                      <FaUsers /> Team Members
-                    </h3>
-                    {formData.users.map((user, index) => (
-                      <div key={index} className={styles.userGroup}>
-                        <h4 className={styles.userTitle}>
-                          <FaUser /> Member {index + 1}
-                        </h4>
+                      <div className={styles.formGroup}>
+                        <label htmlFor="teamSize" className={styles.label}>
+                          <FaUsers /> Team Size
+                        </label>
+                        <Dropdown
+                          value={formData.teamSize}
+                          options={teamSizeOptions}
+                          onChange={handleDropdownChange}
+                          placeholder="Select team size"
+                          className={styles.input}
+                        />
+                      </div>
+
+                      {/* Team Members Section */}
+                      <div className={styles.teamMembersSection}>
+                        <h3 className={styles.sectionTitle}>
+                          <FaUsers /> Team Members
+                        </h3>
+                        {formData.users.map((user, index) => (
+                          <div key={index} className={styles.userGroup}>
+                            <h4 className={styles.userTitle}>
+                              <FaUser /> Member {index + 1}
+                            </h4>
+                            <div className={styles.formGroup}>
+                              <label className={styles.label}>
+                                <FaUser /> Full Name
+                              </label>
+                              <input
+                                type="text"
+                                value={user.name}
+                                onChange={(e) =>
+                                  handleUserChange(
+                                    index,
+                                    "name",
+                                    e.target.value
+                                  )
+                                }
+                                required
+                                className={styles.input}
+                                placeholder={`name`}
+                              />
+                            </div>
+                            <div className={styles.formGroup}>
+                              <label className={styles.label}>
+                                <FaEnvelope /> Email*
+                              </label>
+                              <input
+                                type="email"
+                                value={user.email}
+                                onChange={(e) =>
+                                  handleUserChange(
+                                    index,
+                                    "email",
+                                    e.target.value
+                                  )
+                                }
+                                required
+                                className={styles.input}
+                                placeholder={`email`}
+                              />
+                            </div>
+                            <div className={styles.formGroup}>
+                              <label className={styles.label}>
+                                <FaPhone /> Phone Number*
+                              </label>
+                              <input
+                                type="tel"
+                                value={user.phone}
+                                onChange={(e) =>
+                                  handleUserChange(
+                                    index,
+                                    "phone",
+                                    e.target.value
+                                  )
+                                }
+                                required
+                                className={styles.input}
+                                placeholder={`+91-`}
+                              />
+                            </div>
+                            <div className={styles.formGroup}>
+                              <label className={styles.label}>
+                                <FaUser /> Gender*
+                              </label>
+                              <Dropdown
+                                value={user.gender}
+                                options={genderOptions}
+                                onChange={(value) =>
+                                  handleGenderChange(index, value)
+                                }
+                                placeholder="Select gender"
+                                className={styles.input}
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Payment Section */}
+                      <div className={styles.paymentSection}>
+                        <h3 className={styles.sectionTitle}>
+                          <FaQrcode /> Payment Details
+                        </h3>
+                        <p className={styles.paymentInstructions}>
+                          Pay ₹150 via UPI and provide either transaction ID or
+                          upload payment screenshot
+                        </p>
+
+                        <div className={styles.upiDetails}>
+                          <p>
+                            <strong>CLICK TO COPY UPI ID:</strong>{" "}
+                            <a
+                              onClick={() =>
+                                navigator.clipboard.writeText(UPI_ID)
+                              }
+                              className={styles.upiId}
+                            >
+                              {UPI_ID}
+                            </a>
+                          </p>
+                          <p>
+                            <strong>Amount:</strong> ₹150
+                          </p>
+                          <div className={styles.qrContainer}>
+                            <p>
+                              <strong>Scan to Pay:</strong>
+                            </p>
+                            <img
+                              src="/qr/qr.jpeg"
+                              alt="UPI Payment QR Code"
+                              className={styles.qrCode}
+                            />
+                          </div>
+                        </div>
+
                         <div className={styles.formGroup}>
-                          <label className={styles.label}>
-                            <FaUser /> Full Name
+                          <label htmlFor="upiId" className={styles.label}>
+                            <FaCreditCard /> Your UPI ID (used for payment)
                           </label>
                           <input
                             type="text"
-                            value={user.name}
-                            onChange={(e) =>
-                              handleUserChange(index, "name", e.target.value)
-                            }
+                            id="upiId"
+                            name="upiId"
+                            value={formData.upiId}
+                            onChange={handleInputChange}
+                            placeholder="yourname@oksbi"
                             required
                             className={styles.input}
-                            placeholder={`name`}
                           />
                         </div>
+
                         <div className={styles.formGroup}>
-                          <label className={styles.label}>
-                            <FaEnvelope /> Email*
+                          <label
+                            htmlFor="transactionId"
+                            className={styles.label}
+                          >
+                            <FaCreditCard /> Transaction ID
                           </label>
                           <input
-                            type="email"
-                            value={user.email}
-                            onChange={(e) =>
-                              handleUserChange(index, "email", e.target.value)
-                            }
-                            required
+                            type="text"
+                            id="transactionId"
+                            name="transactionId"
+                            value={formData.transactionId}
+                            onChange={handleInputChange}
+                            placeholder="Enter transaction ID from payment"
                             className={styles.input}
-                            placeholder={`email`}
                           />
                         </div>
+
                         <div className={styles.formGroup}>
-                          <label className={styles.label}>
-                            <FaPhone /> Phone Number*
+                          <label
+                            htmlFor="paymentScreenshot"
+                            className={styles.label}
+                          >
+                            <FaUpload /> Payment Screenshot
                           </label>
                           <input
-                            type="tel"
-                            value={user.phone}
-                            onChange={(e) =>
-                              handleUserChange(index, "phone", e.target.value)
-                            }
-                            required
-                            className={styles.input}
-                            placeholder={`+91-`}
+                            type="file"
+                            id="paymentScreenshot"
+                            name="paymentScreenshot"
+                            onChange={handleFileChange}
+                            accept="image/*"
+                            className={styles.fileInput}
                           />
-                        </div>
-                        <div className={styles.formGroup}>
-                          <label className={styles.label}>
-                            <FaUser /> Gender*
-                          </label>
-                          <Dropdown
-                            value={user.gender}
-                            options={genderOptions}
-                            onChange={(value) => handleGenderChange(index, value)}
-                            placeholder="Select gender"
-                            className={styles.input}
-                          />
+                          {formData.paymentScreenshot && (
+                            <p className={styles.fileName}>
+                              Selected: {formData.paymentScreenshot.name}
+                            </p>
+                          )}
                         </div>
                       </div>
-                    ))}
-                  </div>
 
-                  {/* Payment Section */}
-                  <div className={styles.paymentSection}>
-                    <h3 className={styles.sectionTitle}>
-                      <FaQrcode /> Payment Details
-                    </h3>
-                    <p className={styles.paymentInstructions}>
-                      Pay ₹150 via UPI and provide either transaction ID or
-                      upload payment screenshot
-                    </p>
-
-                    <div className={styles.upiDetails}>
-                      <p>
-                        <strong>CLICK TO COPY UPI ID:</strong>{" "}
-                        <a
-                          onClick={() => navigator.clipboard.writeText(UPI_ID)}
-                          className={styles.upiId}
-                        >
-                          {UPI_ID}
-                        </a>
-                      </p>
-                      <p>
-                        <strong>Amount:</strong> ₹150
-                      </p>
-                      <div className={styles.qrContainer}>
-                        <p>
-                          <strong>Scan to Pay:</strong>
-                        </p>
-                        <img
-                          src="/qr/qr.jpeg"
-                          alt="UPI Payment QR Code"
-                          className={styles.qrCode}
-                        />
-                      </div>
-                    </div>
-
-                    <div className={styles.formGroup}>
-                      <label htmlFor="upiId" className={styles.label}>
-                        <FaCreditCard /> Your UPI ID (used for payment)
-                      </label>
-                      <input
-                        type="text"
-                        id="upiId"
-                        name="upiId"
-                        value={formData.upiId}
-                        onChange={handleInputChange}
-                        placeholder="yourname@oksbi"
-                        required
-                        className={styles.input}
-                      />
-                    </div>
-
-                    <div className={styles.formGroup}>
-                      <label htmlFor="transactionId" className={styles.label}>
-                        <FaCreditCard /> Transaction ID
-                      </label>
-                      <input
-                        type="text"
-                        id="transactionId"
-                        name="transactionId"
-                        value={formData.transactionId}
-                        onChange={handleInputChange}
-                        placeholder="Enter transaction ID from payment"
-                        className={styles.input}
-                      />
-                    </div>
-
-                    <div className={styles.formGroup}>
-                      <label
-                        htmlFor="paymentScreenshot"
-                        className={styles.label}
+                      <button
+                        type="submit"
+                        className={styles.submitButton}
+                        disabled={isSubmitting}
                       >
-                        <FaUpload /> Payment Screenshot
-                      </label>
-                      <input
-                        type="file"
-                        id="paymentScreenshot"
-                        name="paymentScreenshot"
-                        onChange={handleFileChange}
-                        accept="image/*"
-                        className={styles.fileInput}
-                      />
-                      {formData.paymentScreenshot && (
-                        <p className={styles.fileName}>
-                          Selected: {formData.paymentScreenshot.name}
-                        </p>
-                      )}
-                    </div>
+                        {isSubmitting ? "REGISTERING..." : "REGISTER NOW"}
+                      </button>
+                    </form>
                   </div>
-
-                  <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
-                    {isSubmitting ? "REGISTERING..." : "REGISTER NOW"}
-                  </button>
-                </form>
-              </div>
+                )}
+              </>
             )}
 
             <p className={styles.venue}>
