@@ -177,6 +177,11 @@ const Dropdown: React.FC<DropdownProps> = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const handleToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsOpen(!isOpen);
+  };
+
   const handleOptionClick = (optionValue: string) => {
     onChange(optionValue);
     setIsOpen(false);
@@ -199,7 +204,7 @@ const Dropdown: React.FC<DropdownProps> = ({
     >
       <div
         className={styles.dropdownTrigger}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleToggle}
         onKeyDown={handleKeyDown}
         tabIndex={0}
         role="button"
@@ -240,7 +245,9 @@ const Dropdown: React.FC<DropdownProps> = ({
 function App() {
   const [showRegistration, setShowRegistration] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isRegistrationClosed, setIsRegistrationClosed] = useState(checkRegistrationDeadline());
+  const [isRegistrationClosed, setIsRegistrationClosed] = useState(
+    checkRegistrationDeadline()
+  );
   const [modal, setModal] = useState({
     isOpen: false,
     title: "",
