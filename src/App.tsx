@@ -30,6 +30,16 @@ const API_URL = import.meta.env.VITE_API_URL;
 const UPI_ID = import.meta.env.VITE_UPI_ID;
 const whatsAppUrl = import.meta.env.VITE_WHATSAPP_URL;
 
+const checkRegistrationDeadline = (): boolean => {
+  //indian standard time
+  const date = new Date();
+  const now = new Date(
+    date.toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+  );
+  const deadline = new Date("2025-07-04T23:59:59"); // July 4th, 2025 at 11:59:59 PM IST
+  return now > deadline;
+};
+
 interface User {
   name: string;
   email: string;
@@ -230,9 +240,7 @@ const Dropdown: React.FC<DropdownProps> = ({
 function App() {
   const [showRegistration, setShowRegistration] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isRegistrationClosed, setIsRegistrationClosed] = useState(
-    new Date() > new Date("2025-07-04T23:59:59")
-  );
+  const [isRegistrationClosed, setIsRegistrationClosed] = useState(checkRegistrationDeadline());
   const [modal, setModal] = useState({
     isOpen: false,
     title: "",
@@ -492,11 +500,9 @@ function App() {
 
   // Check if registration is closed
   useEffect(() => {
-    const checkRegistrationDeadline = () => {
-      const now = new Date();
-      const deadline = new Date("2025-07-04T23:59:59"); // July 4th, 2025 at 11:59:59 PM
-
-      if (now > deadline) {
+    const checkRegistrationDeadlineIst = () => {
+      const isRegClosed = checkRegistrationDeadline();
+      if (isRegClosed) {
         setIsRegistrationClosed(true);
         setShowRegistration(false);
       }
@@ -504,7 +510,7 @@ function App() {
 
     checkRegistrationDeadline();
     // Check every minute to ensure real-time updates
-    const interval = setInterval(checkRegistrationDeadline, 60000);
+    const interval = setInterval(checkRegistrationDeadlineIst, 60000);
 
     return () => clearInterval(interval);
   }, []);
