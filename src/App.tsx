@@ -25,6 +25,7 @@ import {
 } from "react-icons/fa";
 import { CiWarning } from "react-icons/ci";
 import { FaRegHourglassHalf } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const UPI_ID = import.meta.env.VITE_UPI_ID;
@@ -242,7 +243,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   );
 };
 
-function App() {
+function App({ allowSubmission }: { allowSubmission: boolean }) {
   const [showRegistration, setShowRegistration] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isRegistrationClosed, setIsRegistrationClosed] = useState(
@@ -566,6 +567,14 @@ function App() {
           <br />
           VIBE CODING <span className={styles.highlight}>CHALLENGE?</span>
         </h1>
+
+        {allowSubmission && (
+          <div className={styles.submitProjectContainer}>
+            <Link to="/submit/project" className={styles.submitProjectButton}>
+              <FaUpload /> SUBMIT PROJECT
+            </Link>
+          </div>
+        )}
       </header>
 
       <main>
