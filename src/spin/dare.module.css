@@ -1,0 +1,452 @@
+.dareContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.logoContainer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.logo {
+  height: 60px;
+  object-fit: contain;
+}
+
+.title {
+  font-size: 3rem;
+  color: var(--primary-color);
+  text-align: center;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  text-shadow: 3px 3px 0 var(--accent-color);
+}
+
+.highlight {
+  color: var(--primary-color);
+}
+
+.gameScreen {
+  background-color: var(--accent-color);
+  border: 4px solid var(--primary-color);
+  border-radius: 10px;
+  padding: 1rem;
+  max-width: 100%;
+  margin: 0 auto 3rem;
+  position: relative;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.gameScreenContent {
+  padding: 1rem;
+  background-color: #0f0f0f;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.teamSelection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+  width: 100%;
+  max-width: 500px;
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  color: var(--text-color);
+  text-align: center;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.gameContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 2rem;
+}
+
+.gameHeader {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.gameInstruction {
+  color: var(--text-color);
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+.cardsWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.cardsContainer {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  perspective: 1000px;
+  overflow-y: auto;
+  flex-wrap: wrap;
+}
+
+.card {
+  width: 200px;
+  height: 300px;
+  cursor: pointer;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s ease-in-out, width 0.3s ease, height 0.3s ease;
+}
+
+.card.medium {
+  height: 350px;
+}
+
+.card.large {
+  height: 400px;
+  width: 220px;
+}
+
+.card.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.card.flipped {
+  transform: rotateY(180deg);
+}
+
+.card.loading {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cardInner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+.cardFront, .cardBack {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardFront {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  box-shadow: 0 0 15px rgba(164, 255, 0, 0.5);
+  border: 3px solid var(--secondary-color);
+}
+
+.cardBack {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  border: 3px solid var(--primary-color);
+  transform: rotateY(180deg);
+  padding: 1rem;
+}
+
+.cardNumber {
+  font-size: 4rem;
+  font-weight: bold;
+}
+
+.dareContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  text-align: center;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.dareId {
+  font-size: 0.7rem;
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+.dareDescription {
+  font-size: 0.8rem;
+  color: var(--text-color);
+  line-height: 1.4;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.cardButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+.viewMoreButton {
+  background-color: rgba(164, 255, 0, 0.2);
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  font-size: 0.6rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+}
+
+.viewMoreButton:hover {
+  background-color: rgba(164, 255, 0, 0.3);
+  transform: scale(1.05);
+}
+
+.chooseDareButton {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  border: none;
+  padding: 0.5rem 0.8rem;
+  border-radius: 4px;
+  font-size: 0.6rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  font-weight: bold;
+}
+
+.chooseDareButton:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px var(--primary-color);
+}
+
+.chooseDareButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.spinnerIcon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.resetButton {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: bold;
+}
+
+.resetButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px var(--primary-color);
+}
+
+.completedMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: rgba(164, 255, 0, 0.1);
+  border-radius: 8px;
+  border: 2px solid var(--primary-color);
+}
+
+.completedMessage p {
+  color: var(--text-color);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.completedMessage strong {
+  color: var(--primary-color);
+  font-family: 'Courier New', monospace;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 3rem;
+  padding: 1rem;
+  border-top: 1px solid var(--accent-color);
+  font-size: 0.8rem;
+  color: #999;
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 2rem;
+  }
+
+  .logo {
+    height: 40px;
+  }
+
+  .logoContainer {
+    gap: 1rem;
+  }
+
+  .gameScreen {
+    padding: 0.5rem;
+  }
+
+  .cardsContainer {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  
+  .card {
+    width: 280px;
+    height: 320px;
+  }
+
+  .card.medium {
+    height: 360px;
+  }
+
+  .card.large {
+    height: 400px;
+    width: 300px;
+  }
+
+  .teamSelection {
+    padding: 1rem;
+  }
+
+  .modalContent {
+    width: 95%;
+  }
+
+  .dareDescription {
+    font-size: 0.7rem;
+  }
+
+  .viewMoreButton {
+    font-size: 0.5rem;
+    padding: 0.3rem 0.6rem;
+  }
+  
+  .chooseDareButton {
+    padding: 0.8em 0.6rem;
+    font-size: 0.55rem;
+  }
+  
+  .cardButtons {
+    gap: 0.4rem;
+  }
+  
+  .dareId {
+    font-size: 1rem;
+  }
+  
+  .resultContent {
+    gap: 1rem;
+  }
+  
+  .completedMessage {
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    width: 260px;
+    height: 300px;
+  }
+
+  .card.medium {
+    height: 340px;
+  }
+
+  .card.large {
+    height: 380px;
+    width: 280px;
+  }
+
+  .modalDescription {
+    font-size: 0.7rem;
+  }
+
+  .modalPoints {
+    padding: 0.8rem;
+  }
+
+  .pointsLabel {
+    font-size: 0.7rem;
+  }
+
+  .pointsValue {
+    font-size: 1rem;
+  }
+  
+  .chooseDareButton {
+    padding: 0.8rem 0.5rem;
+    font-size: 0.5rem;
+  }
+  
+  .viewMoreButton {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.5rem;
+  }
+  
+  .cardButtons {
+    gap: 0.3rem;
+  }
+  
+  .dareId {
+    font-size: 0.9rem;
+  }
+  
+  .dareIdNote {
+    font-size: 0.5rem;
+  }
+}
