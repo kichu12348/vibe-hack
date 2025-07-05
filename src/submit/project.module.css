@@ -207,6 +207,7 @@
   color: #999;
   margin-top: 0.25rem;
   font-style: italic;
+  line-height: 1.4;
 }
 
 .submitButton {
@@ -484,6 +485,121 @@
   box-shadow: 0 0 15px var(--primary-color);
 }
 
+/* Bubble Input Styles */
+.bubbleContainer {
+  width: 100%;
+}
+
+.bubbleInputWrapper {
+  background-color: #222;
+  border: 2px solid var(--primary-color);
+  border-radius: 5px;
+  padding: 0.5rem;
+  min-height: 44px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: flex-start;
+  cursor: text;
+  transition: all 0.2s;
+}
+
+.bubbleInputWrapper:hover {
+  border-color: #00ffff;
+}
+
+.bubbleInputWrapper:focus-within {
+  border-color: #00ffff;
+  box-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+}
+
+.urlBubble {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.65rem;
+  animation: bubbleSlideIn 0.2s ease-out;
+  word-break: break-all;
+  max-width: 100%;
+  line-height: 1.3;
+}
+
+@keyframes bubbleSlideIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.urlBubbleText {
+  word-break: break-all;
+  white-space: normal;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  flex: 1;
+}
+
+.urlBubbleRemove {
+  background: none;
+  border: none;
+  color: var(--secondary-color);
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  transition: all 0.2s;
+  font-size: 0.65rem;
+  flex-shrink: 0;
+}
+
+.urlBubbleRemove:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+  transform: scale(1.1);
+}
+
+.bubbleInput {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 0.9rem;
+  outline: none;
+  flex: 1;
+  min-width: 200px;
+  padding: 0.4rem;
+  font-family: inherit;
+}
+
+.bubbleInput::placeholder {
+  color: #666;
+}
+
+.bubbleError {
+  color: #ff4444;
+  font-size: 0.7rem;
+  margin-top: 0.25rem;
+  margin-left: 0.5rem;
+}
+
+.bubbleHelp {
+  font-size: 0.7rem;
+  color: #999;
+  margin-top: 0.25rem;
+  font-style: italic;
+  line-height: 1.4;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .container {
@@ -517,6 +633,27 @@
   .modalContent {
     width: 95%;
   }
+  
+  .urlBubble {
+    font-size: 0.6rem;
+    padding: 0.35rem 0.5rem;
+    border-radius: 6px;
+  }
+  
+  .urlBubbleRemove {
+    width: 14px;
+    height: 14px;
+    font-size: 0.6rem;
+  }
+  
+  .bubbleInput {
+    font-size: 16px;
+    min-width: 150px;
+  }
+
+  .bubbleInputWrapper {
+    padding: 0.4rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -540,5 +677,53 @@
   .submitButton {
     padding: 0.75rem 1.5rem;
     font-size: 0.9rem;
+  }
+  
+  .urlBubble {
+    font-size: 0.55rem;
+    padding: 0.3rem 0.4rem;
+    border-radius: 6px;
+  }
+  
+  .urlBubbleRemove {
+    width: 12px;
+    height: 12px;
+    font-size: 0.55rem;
+  }
+  
+  .bubbleInput {
+    min-width: 120px;
+    font-size: 16px;
+  }
+  
+  .bubbleHelp {
+    font-size: 0.6rem;
+  }
+
+  .bubbleInputWrapper {
+    padding: 0.3rem;
+    gap: 0.3rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .urlBubble {
+    font-size: 0.5rem;
+    padding: 0.25rem 0.35rem;
+  }
+  
+  .urlBubbleRemove {
+    width: 10px;
+    height: 10px;
+    font-size: 0.5rem;
+  }
+  
+  .bubbleInput {
+    min-width: 100px;
+  }
+
+  .bubbleInputWrapper {
+    padding: 0.25rem;
+    gap: 0.25rem;
   }
 }

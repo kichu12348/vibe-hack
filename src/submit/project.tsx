@@ -244,12 +244,150 @@ const showDeadlineNotice = () => {
 
 const SHOW_DEADLINE_NOTICE = showDeadlineNotice();
 
+interface BubbleInputProps {
+  urls: string[];
+  onUrlsChange: (urls: string[]) => void;
+  placeholder?: string;
+  className?: string;
+}
+
+const BubbleInput: React.FC<BubbleInputProps> = ({
+  urls,
+  onUrlsChange,
+  placeholder = "Enter URLs...",
+  className = "",
+}) => {
+  const [inputValue, setInputValue] = useState("");
+  const [error, setError] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const isValidUrl = (url: string): boolean => {
+    try {
+      new URL(url.trim());
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const addUrl = (url: string) => {
+    const trimmedUrl = url.trim();
+    if (!trimmedUrl) return;
+
+    if (!isValidUrl(trimmedUrl)) {
+      setError(`"${trimmedUrl}" is not a valid URL`);
+      return;
+    }
+
+    if (urls.includes(trimmedUrl)) return;
+
+    setError("");
+    onUrlsChange([...urls, trimmedUrl]);
+    setInputValue("");
+  };
+
+  const removeUrl = (urlToRemove: string) => {
+    onUrlsChange(urls.filter((url) => url !== urlToRemove));
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInputValue(value);
+    setError("");
+
+    // Auto-detect URLs when user types space, comma, or enters
+    const separators = /[\s,]+/;
+    if (separators.test(value)) {
+      const parts = value.split(separators);
+      const urlPart = parts[0].trim();
+      const remaining = parts.slice(1).join(" ").trim();
+
+      if (urlPart) {
+        addUrl(urlPart);
+      }
+      setInputValue(remaining);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (inputValue.trim()) {
+        addUrl(inputValue.trim());
+      }
+    } else if (e.key === "Backspace" && !inputValue && urls.length > 0) {
+      // Remove last URL when backspace is pressed on empty input
+      removeUrl(urls[urls.length - 1]);
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const pastedText = e.clipboardData.getData("text");
+    const urlsFromPaste = pastedText
+      .split(/[\s,\n\r]+/)
+      .map((url) => url.trim())
+      .filter((url) => url.length > 0);
+
+    urlsFromPaste.forEach((url) => {
+      if (!urls.includes(url)) {
+        addUrl(url);
+      }
+    });
+  };
+
+  const handleContainerClick = () => {
+    inputRef.current?.focus();
+  };
+
+  return (
+    <div className={`${styles.bubbleContainer} ${className}`}>
+      <div className={styles.bubbleInputWrapper} onClick={handleContainerClick}>
+        {urls.map((url, index) => (
+          <div key={index} className={styles.urlBubble}>
+            <span className={styles.urlBubbleText} title={url}>
+              {url}
+            </span>
+            <button
+              type="button"
+              className={styles.urlBubbleRemove}
+              onClick={(e) => {
+                e.stopPropagation();
+                removeUrl(url);
+              }}
+              aria-label={`Remove ${url}`}
+            >
+              <FaTimes />
+            </button>
+          </div>
+        ))}
+        <input
+          ref={inputRef}
+          type="text"
+          value={inputValue}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
+          onPaste={handlePaste}
+          placeholder={urls.length === 0 ? placeholder : ""}
+          className={styles.bubbleInput}
+        />
+      </div>
+      {error && <p className={styles.bubbleError}>{error}</p>}
+      <p className={styles.bubbleHelp}>
+        Type or paste URLs and press Enter, Space, or Comma to add them. Press
+        Backspace to remove the last URL.
+      </p>
+    </div>
+  );
+};
+
 function Projects() {
   const [teams, setTeams] = useState<AllTeamsApiResponse[]>([]);
   const [isSubmissionClosed, setIsSubmissionClosed] = useState(
     checkSubmissionDeadline()
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [projectUrls, setProjectUrls] = useState<string[]>([]);
   const [formData, setFormData] = useState<ProjectFormData>({
     registrationId: 0,
     projectTitle: "",
@@ -344,7 +482,7 @@ function Projects() {
     if (isSubmissionClosed) {
       showModal(
         "Submission Closed",
-        "Project submission deadline has passed on July 6th, 2025 at 6:00 PM.",
+        "Project submission deadline has passed on July 6th, 2025 at 9:00 PM.",
         "warning"
       );
       return;
@@ -370,16 +508,8 @@ function Projects() {
       return;
     }
 
-    if (!formData.projectUrl.trim()) {
-      showModal("URL Required", "Please enter a project URL.", "warning");
-      return;
-    }
-
-    // Validate URL format
-    try {
-      new URL(formData.projectUrl);
-    } catch {
-      showModal("Invalid URL", "Please enter a valid project URL.", "warning");
+    if (projectUrls.length === 0) {
+      showModal("URL Required", "Please add at least one project URL.", "warning");
       return;
     }
 
@@ -392,7 +522,13 @@ function Projects() {
         true
       );
 
-      await submitProject(formData);
+      // Convert URLs array to comma-separated string
+      const processedFormData = {
+        ...formData,
+        projectUrl: projectUrls.join(","),
+      };
+
+      await submitProject(processedFormData);
 
       showModal(
         "Project Submitted Successfully!",
@@ -407,6 +543,7 @@ function Projects() {
         projectDescription: "",
         projectUrl: "",
       });
+      setProjectUrls([]);
     } catch (error) {
       console.error("Submission error:", error);
       showModal(
@@ -500,7 +637,7 @@ function Projects() {
                   <div className={styles.deadlineNotice}>
                     <p className={styles.deadlineText}>
                       <CiWarning size={28} /> Project submission closes on July
-                      6th, 2025 at 6:00 PM
+                      6th, 2025 at 9:00 PM
                     </p>
                   </div>
                 )}
@@ -557,22 +694,14 @@ function Projects() {
 
                     <div className={styles.formGroup}>
                       <label htmlFor="projectUrl" className={styles.label}>
-                        <FaLink /> Project URL
+                        <FaLink /> Project URLs
                       </label>
-                      <input
-                        type="url"
-                        id="projectUrl"
-                        name="projectUrl"
-                        value={formData.projectUrl}
-                        onChange={handleInputChange}
-                        required
+                      <BubbleInput
+                        urls={projectUrls}
+                        onUrlsChange={setProjectUrls}
+                        placeholder="https://github.com/yourusername/project"
                         className={styles.input}
-                        placeholder="https://github.com/yourusername/project or https://yourproject.com"
                       />
-                      <p className={styles.urlHelp}>
-                        Provide a link to your project repository (GitHub,
-                        Google Drive) or live demo
-                      </p>
                     </div>
 
                     <button

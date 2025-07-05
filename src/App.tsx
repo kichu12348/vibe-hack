@@ -570,7 +570,7 @@ function App({ allowSubmission }: { allowSubmission: boolean }) {
 
         {allowSubmission && (
           <div className={styles.submitProjectContainer}>
-            <Link to="/submit/project" className={styles.submitProjectButton}>
+            <Link to="/submit" className={styles.submitProjectButton}>
               <FaUpload /> SUBMIT PROJECT
             </Link>
           </div>

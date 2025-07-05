@@ -18,7 +18,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <Routes>
         {allowSubmission() && (
-          <Route path="/submit/project" element={<Projects />} />
+          <Route path="/submit" element={<Projects />} />
         )}
         <Route path="*" element={<App allowSubmission={allowSubmission()} />} />
       </Routes>
