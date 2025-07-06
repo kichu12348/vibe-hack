@@ -59,7 +59,7 @@ const checkSubmissionDeadline = (): boolean => {
   const now = new Date(
     date.toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
   );
-  const deadline = new Date("2025-07-06T21:00:00"); // July 6th, 2025 at 9:00 PM IST
+  const deadline = new Date("2025-07-06T22:00:00"); // July 6th, 2025 at 10:00 PM IST
   return now > deadline;
 };
 
@@ -615,7 +615,7 @@ function Projects() {
                 <h3 className={styles.infoTitle}>
                   <FaClock /> DEADLINE TIME
                 </h3>
-                <p className={styles.infoValue}>09:00 PM</p>
+                <p className={styles.infoValue}>10:00 PM</p>
               </div>
             </div>
 
@@ -626,7 +626,7 @@ function Projects() {
                 </h3>
                 <p className={styles.submissionClosedMessage}>
                   Project submission deadline has passed on July 6th, 2025 at
-                  9:00 PM.
+                  10:00 PM.
                   <br />
                   Thank you for participating in the VIBE CODING HACK+ATHON!
                 </p>
