@@ -375,7 +375,7 @@ const BubbleInput: React.FC<BubbleInputProps> = ({
       {error && <p className={styles.bubbleError}>{error}</p>}
       <p className={styles.bubbleHelp}>
         Type or paste URLs and press Enter, Space, or Comma to add them. Press
-        Backspace to remove the last URL.
+        Backspace to remove the last URL.(Videos, GitHub repos, Drive links, ppt files, hosted urls.)
       </p>
     </div>
   );
