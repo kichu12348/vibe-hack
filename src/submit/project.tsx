@@ -637,7 +637,7 @@ function Projects() {
                   <div className={styles.deadlineNotice}>
                     <p className={styles.deadlineText}>
                       <CiWarning size={28} /> Project submission closes on July
-                      6th, 2025 at 9:00 PM
+                      6th, 2025 at 10:00 PM
                     </p>
                   </div>
                 )}
