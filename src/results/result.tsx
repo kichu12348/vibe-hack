@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  FaTrophy,
-  FaMedal,
-  FaAward,
-  FaCrown,
-} from "react-icons/fa";
+import { FaTrophy, FaMedal, FaAward, FaCrown, FaHeart } from "react-icons/fa";
 import styles from "./result.module.css";
 
 interface Winner {
@@ -118,11 +113,9 @@ function Result() {
             </div>
 
             <div className={styles.congratsSection}>
-              <h3 className={styles.congratsTitle}>
-                CONGRATULATIONS TO ALL WINNERS!
-              </h3>
               <p className={styles.congratsMessage}>
-                Thank you to all participants who made this hackathon amazing!
+                Thank you to all participants who made this hackathon amazing!{" "}
+                <FaHeart className={styles.heartIcon} />
               </p>
             </div>
           </div>
@@ -130,7 +123,10 @@ function Result() {
       </main>
 
       <footer className={styles.footer}>
-        <p>© {new Date().getFullYear()} VIBE CODING HACK+ATHON. All rights reserved.</p>
+        <p>
+          © {new Date().getFullYear()} VIBE CODING HACK+ATHON. All rights
+          reserved.
+        </p>
         <p>Organized by IEDC BOOTCAMP CEC & WE Cell</p>
       </footer>
     </div>

@@ -109,7 +109,6 @@
 }
 
 .winnerCard {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
   border: 3px solid;
   border-radius: 15px;
   padding: 1.5rem;
@@ -126,6 +125,11 @@
   flex: 1;
   max-width: 280px;
   text-align: center;
+}
+
+.heartIcon{
+  color: #ff0026;
+  font-size: 1.2rem;
 }
 
 /* Podium heights */
@@ -163,7 +167,6 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
   transform: translateX(-100%);
   transition: transform 0.6s ease;
 }
@@ -293,7 +296,6 @@
 .congratsSection {
   text-align: center;
   padding: 2rem;
-  background: linear-gradient(135deg, rgba(164, 255, 0, 0.1) 0%, rgba(164, 255, 0, 0.05) 100%);
   border: 2px solid var(--primary-color);
   border-radius: 15px;
   width: 100%;
