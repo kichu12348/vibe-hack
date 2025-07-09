@@ -1,0 +1,485 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.logoContainer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.logo {
+  height: 60px;
+  object-fit: contain;
+}
+
+.title {
+  font-size: 3rem;
+  color: var(--primary-color);
+  text-align: center;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  text-shadow: 3px 3px 0 var(--accent-color);
+}
+
+.highlight {
+  color: var(--primary-color);
+}
+
+.backButtonContainer {
+  margin-bottom: 1rem;
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: none;
+  color: var(--primary-color);
+  text-decoration: none;
+  border: 2px solid var(--primary-color);
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.backButton:hover {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(164, 255, 0, 0.3);
+}
+
+.resultsScreen {
+  background-color: var(--accent-color);
+  border: 4px solid var(--primary-color);
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 0 auto 3rem;
+  position: relative;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.resultsContent {
+  padding: 2rem;
+  background-color: #0f0f0f;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.subtitle {
+  font-size: 2rem;
+  color: var(--text-color);
+  text-align: center;
+  margin-bottom: 3rem;
+  text-shadow: 2px 2px 0 var(--primary-color);
+}
+
+.winnersContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 900px;
+  margin-bottom: 3rem;
+}
+
+.winnerCard {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  border: 3px solid;
+  border-radius: 15px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  animation: slideInUp 0.6s ease-out forwards;
+  opacity: 0;
+  transform: translateY(30px);
+  flex: 1;
+  max-width: 280px;
+  text-align: center;
+}
+
+/* Podium heights */
+.podiumPosition1 {
+  /* 2nd place - left side */
+  min-height: 320px;
+  margin-top: 60px;
+}
+
+.podiumPosition2 {
+  /* 1st place - center, tallest */
+  min-height: 400px;
+  margin-top: 0;
+  transform: scale(1.05);
+  z-index: 2;
+}
+
+.podiumPosition3 {
+  /* 3rd place - right side */
+  min-height: 280px;
+  margin-top: 80px;
+}
+
+@keyframes slideInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.winnerCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.winnerCard:hover::before {
+  transform: translateX(100%);
+}
+
+.winnerCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+}
+
+.position1 {
+  border-color: #ffd700;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.position1:hover {
+  box-shadow: 0 15px 30px rgba(255, 215, 0, 0.4);
+}
+
+.position2 {
+  border-color: #c0c0c0;
+  box-shadow: 0 0 20px rgba(192, 192, 192, 0.3);
+}
+
+.position2:hover {
+  box-shadow: 0 15px 30px rgba(192, 192, 192, 0.4);
+}
+
+.position3 {
+  border-color: #cd7f32;
+  box-shadow: 0 0 20px rgba(205, 127, 50, 0.3);
+  max-height: 320px;
+}
+
+.position3:hover {
+  box-shadow: 0 15px 30px rgba(205, 127, 50, 0.4);
+}
+
+.winnerRank {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: auto;
+}
+
+.rankIcon {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.position1 .rankIcon {
+  color: #ffd700;
+  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+}
+
+.position2 .rankIcon {
+  color: #c0c0c0;
+  filter: drop-shadow(0 0 10px rgba(192, 192, 192, 0.5));
+}
+
+.position3 .rankIcon {
+  color: #cd7f32;
+  filter: drop-shadow(0 0 10px rgba(205, 127, 50, 0.5));
+}
+
+.rankText {
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.position1 .rankText {
+  color: #ffd700;
+}
+
+.position2 .rankText {
+  color: #c0c0c0;
+}
+
+.position3 .rankText {
+  color: #cd7f32;
+}
+
+.winnerInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.teamName {
+  font-size: 1.2rem;
+  color: var(--primary-color);
+  margin: 0;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.projectName {
+  font-size: 0.9rem;
+  color: var(--text-color);
+  margin: 0;
+  opacity: 0.9;
+  text-align: center;
+}
+
+.winnerBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.badgeIcon {
+  font-size: 1.5rem;
+  color: var(--secondary-color);
+}
+
+.congratsSection {
+  text-align: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(164, 255, 0, 0.1) 0%, rgba(164, 255, 0, 0.05) 100%);
+  border: 2px solid var(--primary-color);
+  border-radius: 15px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.congratsTitle {
+  font-size: 1.2rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+}
+
+.congratsMessage {
+  font-size: 0.9rem;
+  color: var(--text-color);
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 3rem;
+  padding: 1rem;
+  border-top: 1px solid var(--accent-color);
+  font-size: 0.8rem;
+  color: #999;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem 0.5rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .logo {
+    height: 40px;
+  }
+
+  .logoContainer {
+    gap: 1rem;
+  }
+
+  .resultsScreen {
+    padding: 0.5rem;
+    border-width: 2px;
+  }
+
+  .resultsContent {
+    padding: 1rem;
+  }
+
+  .winnersContainer {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .winnerCard {
+    max-width: 100%;
+    min-height: auto !important;
+    margin-top: 0 !important;
+    transform: none !important;
+    padding: 1.5rem;
+  }
+
+  .podiumPosition1,
+  .podiumPosition2,
+  .podiumPosition3 {
+    min-height: auto;
+    margin-top: 0;
+    transform: none;
+  }
+
+  .podiumPosition2 {
+    order: -1; /* Move 1st place to top on mobile */
+  }
+
+  .rankIcon {
+    font-size: 2.5rem;
+  }
+
+  .teamName {
+    font-size: 1.2rem;
+  }
+
+  .projectName {
+    font-size: 0.9rem;
+  }
+
+  .congratsTitle {
+    font-size: 1rem;
+  }
+
+  .congratsMessage {
+    font-size: 0.8rem;
+  }
+
+  .backButton {
+    font-size: 0.7rem;
+    padding: 0.6rem 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .subtitle {
+    font-size: 1.2rem;
+  }
+
+  .logo {
+    height: 30px;
+  }
+
+  .winnerCard {
+    padding: 1rem;
+  }
+
+  .rankIcon {
+    font-size: 2rem;
+  }
+
+  .teamName {
+    font-size: 1rem;
+  }
+
+  .projectName {
+    font-size: 0.8rem;
+  }
+
+  .congratsSection {
+    padding: 1rem;
+  }
+
+  .congratsTitle {
+    font-size: 0.9rem;
+  }
+
+  .congratsMessage {
+    font-size: 0.7rem;
+  }
+}
+
+/* Tablet adjustments */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .winnersContainer {
+    gap: 0.5rem;
+  }
+
+  .winnerCard {
+    max-width: 250px;
+    padding: 1.2rem;
+  }
+
+  .podiumPosition1 {
+    min-height: 300px;
+    margin-top: 50px;
+  }
+
+  .podiumPosition2 {
+    min-height: 360px;
+    transform: scale(1.03);
+  }
+
+  .podiumPosition3 {
+    min-height: 260px;
+    margin-top: 70px;
+  }
+
+  .teamName {
+    font-size: 1.1rem;
+  }
+
+  .projectName {
+    font-size: 0.85rem;
+  }
+}

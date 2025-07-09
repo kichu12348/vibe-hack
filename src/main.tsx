@@ -5,6 +5,7 @@ import Projects from "./submit/project.tsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./index.css";
 import Dare from "./spin/Dare.tsx";
+import Result from "./results/result.tsx";
 
 const allowSubmission = () => {
   const deadlineStart = new Date("2025-07-06T00:00:00"); // July 6th, 2025 at 12:00 AM IST
@@ -21,6 +22,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         {allowSubmission() && (
           <Route path="/submit" element={<Projects />} />
         )}
+        <Route path="/results" element={<Result />} />
         <Route path="/dare" element={<Dare />} />
         <Route path="*" element={<App allowSubmission={allowSubmission()} />} />
       </Routes>
