@@ -243,7 +243,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   );
 };
 
-function App({ allowSubmission }: { allowSubmission: boolean }) {
+function App() {
   const [showRegistration, setShowRegistration] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isRegistrationClosed, setIsRegistrationClosed] = useState(

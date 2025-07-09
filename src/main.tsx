@@ -24,7 +24,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         )}
         <Route path="/results" element={<Result />} />
         <Route path="/dare" element={<Dare />} />
-        <Route path="*" element={<App allowSubmission={allowSubmission()} />} />
+        <Route path="*" element={<App />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
