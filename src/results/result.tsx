@@ -25,7 +25,7 @@ const winners: Winner[] = [
   {
     position: 3,
     teamName: "Team Code Crafters",
-    projectName: "waitless",
+    projectName: "Waitless",
     icon: <FaMedal />,
   },
 ];
