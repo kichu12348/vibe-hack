@@ -12,20 +12,20 @@ interface Winner {
 const winners: Winner[] = [
   {
     position: 2,
-    teamName: "Team Tetrons",
-    projectName: "Accesschain",
+    teamName: "Team Geeks",
+    projectName: "Cambro",
     icon: <FaTrophy />,
   },
   {
     position: 1,
-    teamName: "Team Respawn",
-    projectName: "Newsflix",
+    teamName: "Team Tetrons",
+    projectName: "Access Chain",
     icon: <FaCrown />,
   },
   {
     position: 3,
-    teamName: "Team Spectre",
-    projectName: "Dozy",
+    teamName: "Team Code Crafters",
+    projectName: "waitless",
     icon: <FaMedal />,
   },
 ];
