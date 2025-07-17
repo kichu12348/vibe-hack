@@ -11,7 +11,7 @@ const allowSubmission = () => {
   return false; // Disable submission for now
 };
 
-const SHOW_RESULTS=false; // Set to true to show results page
+const SHOW_RESULTS=true; // Set to true to show results page
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
