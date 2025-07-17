@@ -568,7 +568,7 @@ function App() {
           VIBE CODING <span className={styles.highlight}>CHALLENGE?</span>
         </h1>
 
-        {false && (
+        {true && (
           <div className={styles.submitProjectContainer}>
             <Link to="/results" className={styles.submitProjectButton}>
               <FaTrophy /> VIEW RESULTS
